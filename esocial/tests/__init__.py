@@ -23,7 +23,8 @@ here = os.path.dirname(os.path.abspath(__file__))
 def ws_factory():
     employer_id = {
         'tpInsc': 1,
-        'nrInsc': '12345678901234'
+        'nrInsc': '12345678901234',
+        'use_full': True
     }
     return client.WSClient(
         pfx_file=os.path.join(here, 'certs', 'libesocial-cert-test.pfx'),

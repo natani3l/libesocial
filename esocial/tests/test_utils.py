@@ -16,8 +16,8 @@ from esocial import utils
 
 
 def test_format_xsd_version():
-    versions = ['2.5.0', '1.1.1', 'S-1.0']
-    expected = ['2_5_0', '1_1_1', 'S_1_0']
+    versions = ['2.5.0', '1.1.1', 'S-1.0', 'S-1.2']
+    expected = ['2_5_0', '1_1_1', 'S_1_0', 'S_1_2']
     for i, v in enumerate(versions):
         xsd_version = utils.format_xsd_version(v)
         assert  xsd_version == expected[i], 'Expetected [{}], Got [{}]'.format(expected[i], xsd_version)
