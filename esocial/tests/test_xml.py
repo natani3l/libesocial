@@ -25,6 +25,34 @@ from esocial.tests import (
     ws_factory,
 )
 
+def is_number(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+      return False
+
+def test_add_event_2500():
+    ws = ws_factory()
+    evt = xml.load_fromfile(os.path.join(here, 'xml', 'S-2500-v{}-not_signed.xml'.format(esocial.__esocial_version__)))
+    evt_id, evt_sig = ws.add_event(evt, gen_event_id=True)
+    evt_proc_trab_tag = xml.find(evt_sig.getroot(), 'evtProcTrab')
+    assert evt_proc_trab_tag.get('Id') == evt_id, '[add_event] Expected {}, got {}'.format(evt_proc_trab_tag.get('Id'), evt_id)
+    
+    nr_insc = xml.find(evt.getroot(), 'nrInsc').text
+    assert ws.employer_id['nrInsc'] == nr_insc, '[add_event] Expected {}, got {}'.format(ws.employer_id, nr_insc)
+
+    tp_insc = evt_id[2:3]
+    assert is_number(tp_insc), "[add_event] Expected type number, got {}".format(type(tp_insc))
+    assert ws.employer_id['tpInsc'] == int(tp_insc), '[add_event] Expected {}, got {}'.format(ws.employer_id['tpInsc'], tp_insc)
+
+    nr_insc_id = evt_id[3:17]
+    assert nr_insc_id == nr_insc, '[add_event] Expected {}, got {}'.format(nr_insc, nr_insc_id)
+
+    expected_id = xml.find(evt.getroot(), 'evtProcTrab').get('Id')
+    evt_id, evt_sig = ws.add_event(evt)
+    assert expected_id == evt_id, '[add_event] Expected {}, got {}'.format(expected_id, evt_id)
+
 def test_add_event_2220():
     ws = ws_factory()
     evt = xml.load_fromfile(os.path.join(here, 'xml', 'S-2220-v{}-not_signed.xml'.format(esocial.__esocial_version__)))
